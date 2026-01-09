@@ -139,8 +139,27 @@ async function init() {
 
     // 1. Check Device Name & Model
     // Note: User confirmed sec_detect exposes device_model
-    const deviceName = await exec('cat /sys/kernel/sec_detect/device_name');
-    const deviceModel = await exec('cat /sys/kernel/sec_detect/device_model');
+    // Try to read device name from various potential paths
+    let deviceName = null;
+    let deviceModel = null;
+
+    const namePaths = [
+        '/sys/kernel/sec_detect/device_name',
+        '/sys/kernel/mi_detect/device_name'
+    ];
+    const modelPaths = [
+        '/sys/kernel/sec_detect/device_model',
+        '/sys/kernel/mi_detect/device_model'
+    ];
+
+    for (const path of namePaths) {
+        deviceName = await exec(`cat ${path}`);
+        if (deviceName) break;
+    }
+    for (const path of modelPaths) {
+        deviceModel = await exec(`cat ${path}`);
+        if (deviceModel) break;
+    }
 
     let isTrinketMi = false;
     let is1280 = false;
@@ -150,7 +169,7 @@ async function init() {
         deviceEl.textContent = displayName;
 
         // Theme & Identification Logic
-        const TRINKET_DEVICES = ['ginkgo', 'willow', 'sm6125', 'trinket']; // FloppyTrinketMi family
+        const TRINKET_DEVICES = ['ginkgo', 'willow', 'sm6125', 'trinket', 'laurel_sprout']; // FloppyTrinketMi family
         const deviceCode = (deviceName || '').toLowerCase();
 
         isTrinketMi = TRINKET_DEVICES.some(code => deviceCode.includes(code));
