@@ -38,24 +38,156 @@ body {
     /* Fallback, KSU usually provides system fonts */
     background-color: var(--md-sys-color-surface);
     color: var(--md-sys-color-on-surface);
-    display: flex;
-    justify-content: center;
+    /* display: flex; REMOVED flex center to allow scrolling and app bar flow */
+    /* justify-content: center; */
     min-height: 100vh;
-    padding: 16px;
+    padding: 0;
+    /* Removing body padding, handled by container */
+    overflow-x: hidden;
+}
+
+
+
+
+
+/* Top App Bar */
+.top-app-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background-color: var(--md-sys-color-surface);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 24px;
+    /* M3 standard spacing */
+    z-index: 100;
+}
+
+.top-app-bar .title {
+    font-size: 22px;
+    font-weight: 400;
+    /* Regular per M3 */
+    color: var(--md-sys-color-on-surface);
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--md-sys-color-on-surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button:active {
+    background-color: var(--md-sys-color-surface-variant);
+}
+
+.main-content-padding {
+    padding: 80px 16px 16px 16px;
+    /* Top padding > 64px for app bar */
 }
 
 .container {
     width: 100%;
     max-width: 600px;
+    margin: 0 auto;
+    /* Center the container content */
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: var(--md-sys-color-surface);
+    border-top: 1px solid var(--md-sys-color-surface-variant);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    color: var(--md-sys-color-on-surface-variant);
+    width: 64px;
+}
+
+.nav-item.active {
+    color: var(--md-sys-color-primary);
+}
+
+.nav-item.active .icon {
+    background-color: var(--md-sys-color-secondary-container);
+    /* M3 Active indicator */
+    color: var(--md-sys-color-on-secondary-container);
+    padding: 4px 20px;
+    border-radius: 16px;
+}
+
+.nav-item .label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Icon Utilities */
+.icon-svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    /* Inherits text color */
+    vertical-align: middle;
+}
+
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+.main-content-padding {
+    padding: 80px 16px 96px 16px;
+    /* Bottom padding for nav bar */
 }
 
 /* Hero Section */
 .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
     text-align: center;
-    margin-bottom: 24px;
-    padding: 16px 0;
 }
 
+.hero-title {
+    margin-top: 16px;
+    font-size: 24px;
+    /* Sizing as requested */
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+}
+
+.hero-subtitle {
+    font-size: 14px;
+    color: var(--md-sys-color-on-surface-variant);
+    margin-top: 4px;
+}
+
+/* Logo Styles (Restored) */
 .logo-container {
     width: 120px;
     height: 120px;
@@ -73,44 +205,15 @@ body {
 
 .app-logo-svg path {
     fill: var(--md-sys-color-primary);
-    /* Fill the shape */
     stroke: var(--md-sys-color-primary);
-    /* Add stroke to thicken */
     stroke-width: 10px;
-    /* Thicken the lines */
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
-.app-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    /* No masking */
-}
-
-@media (prefers-color-scheme: dark) {
-    .app-logo {
-        filter: invert(1);
-    }
-}
-
-h1 {
-    font-size: 24px;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface);
-}
-
-.subtitle {
-    font-size: 14px;
-    color: var(--md-sys-color-on-surface-variant);
-    margin-top: 4px;
-}
-
-/* Cards */
+/* Cards (Restored) */
 .card {
     background-color: var(--md-sys-color-surface);
-    /* Could elevate this */
     border: 1px solid var(--md-sys-color-outline);
     border-radius: var(--md-sys-shape-corner-large);
     padding: 16px;
@@ -125,7 +228,7 @@ h1 {
     color: var(--md-sys-color-primary);
 }
 
-.card-header h2 {
+.card-header .card-title {
     font-size: 18px;
     font-weight: 500;
 }
@@ -151,11 +254,8 @@ h1 {
     font-weight: 600;
 }
 
-.hidden {
-    display: none;
-}
-
 /* Error State */
-.error .card-header {
+.error .card-header,
+.card-header.error {
     color: #ba1a1a;
 }

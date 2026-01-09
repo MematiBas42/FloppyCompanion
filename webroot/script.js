@@ -51,6 +51,28 @@ const VARIANTS = {
 const FLOPPY1280_DEVICES = ['a25x', 'a33x', 'a53x', 'm33x', 'm34x', 'gta4xls', 'a26xs'];
 
 async function init() {
+    // Navigation Logic
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Deactivate all
+            navItems.forEach(nav => nav.classList.remove('active'));
+            tabContents.forEach(tab => tab.classList.add('hidden'));
+            tabContents.forEach(tab => tab.classList.remove('active'));
+
+            // Activate clicked
+            item.classList.add('active');
+            const targetId = item.getAttribute('data-tab');
+            const targetTab = document.getElementById(targetId);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+                targetTab.classList.add('active');
+            }
+        });
+    });
+
     const statusCard = document.getElementById('status-card');
     const errorCard = document.getElementById('error-card');
     const deviceEl = document.getElementById('device-name');
@@ -58,7 +80,8 @@ async function init() {
     const versionEl = document.getElementById('kernel-version');
     const variantEl = document.getElementById('kernel-variant');
     const buildTypeEl = document.getElementById('build-type');
-    const kernelNameEl = document.getElementById('kernel-name');
+    // const kernelNameEl = document.getElementById('kernel-name'); // Removed as title is static or handled elsewhere
+    const subtitleEl = document.getElementById('managed-kernel-subtitle');
 
     // 1. Check Device Name & Model
     // Note: User confirmed sec_detect exposes device_model
@@ -72,9 +95,25 @@ async function init() {
         if (FLOPPY1280_DEVICES.includes(deviceName)) {
             // Apply "Exynos Blue" specific styling if needed via class
             document.body.classList.add('theme-exynos-blue');
+            if (subtitleEl) subtitleEl.textContent = 'Managing: Floppy1280';
+        } else {
+            if (subtitleEl) subtitleEl.textContent = 'Managing: FloppyKernel'; // Generic fallback
         }
     } else {
         deviceEl.textContent = 'Unknown';
+    }
+
+    // Setup Exit Button
+    const exitBtn = document.getElementById('exit-btn');
+    if (exitBtn) {
+        exitBtn.addEventListener('click', () => {
+            if (typeof ksu !== 'undefined' && ksu.exit) {
+                ksu.exit();
+            } else {
+                console.log('Exit requested (testing environment)');
+                // window.close(); // Often blocked in browsers
+            }
+        });
     }
 
     // 2. Check Kernel Version (uname -r)
@@ -93,12 +132,7 @@ async function init() {
     if (linuxVerEl) linuxVerEl.textContent = linuxVer;
 
     if (uname.includes('Floppy')) {
-        // Determine specific family based on device
-        if (deviceName && FLOPPY1280_DEVICES.includes(deviceName)) {
-            kernelNameEl.textContent = 'Floppy1280';
-        } else {
-            kernelNameEl.textContent = 'FloppyKernel'; // Fallback
-        }
+        // Family handling moved to subtitle logic above
 
         // Parse Version
         // Regex to capture: v[Number]
@@ -152,7 +186,6 @@ async function init() {
         // Not FloppyKernel
         statusCard.classList.add('hidden');
         errorCard.classList.remove('hidden');
-        kernelNameEl.textContent = 'Stock/Other';
     }
 }
 
