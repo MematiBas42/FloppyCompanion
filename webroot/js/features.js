@@ -386,7 +386,7 @@ async function applyChanges() {
             logToModal(res);
         }
 
-        if (res.includes("Success")) {
+        if (res && res.includes("Success")) {
             logToModal("\nPersisting changes...");
 
             // Persist changes to /cache/fk_feat

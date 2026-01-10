@@ -58,7 +58,7 @@ case "$1" in
         fi
 
         chmod 755 "$MAGISKBOOT"
-        "$MAGISKBOOT" unpack boot.img > /dev/null 2>&1
+        "$MAGISKBOOT" unpack -h boot.img > /dev/null 2>&1
         
         if [ -f "kernel" ]; then
             log "Unpack successful."
@@ -129,11 +129,13 @@ case "$1" in
                 KEY="${ARG%%=*}"
                 VAL="${ARG#*=}"
                 
-                if echo "$NEW_CMDLINE" | grep -q "${KEY}="; then
-                    # Replace existing
-                    NEW_CMDLINE=$(echo "$NEW_CMDLINE" | sed -E "s/${KEY}=[0-9]+/${KEY}=${VAL}/g")
+                # Check for existence with space pads for safety (avoids partial matches)
+                if echo " $NEW_CMDLINE " | grep -q " ${KEY}="; then
+                    # Replace existing: match start-of-line OR space before key
+                    # capture the separator (\1) to preserve it
+                    NEW_CMDLINE=$(echo "$NEW_CMDLINE" | sed -E "s/(^|[[:space:]])${KEY}=[^[:space:]]*/\1${KEY}=${VAL}/g")
                 else
-                    # Append new if not present (simple bools might be missing)
+                    # Append new if not present
                     NEW_CMDLINE="$NEW_CMDLINE ${KEY}=${VAL}"
                 fi
             done
