@@ -497,17 +497,18 @@ async function init() {
 
         schema.forEach(item => {
             // Skip entire feature if it's experimental and toggle is off
-            if (item.experimental && !showExperimental) {
+            // BUT show it if it's currently enabled (so user can disable it)
+            const currentVal = currentFeatures[item.key] || '0';
+            const isEnabled = currentVal !== '0';
+            if (item.experimental && !showExperimental && !isEnabled) {
                 return;
             }
 
             const el = document.createElement('div');
             el.className = 'feature-card';
 
-            const currentVal = currentFeatures[item.key] || '0';
-
             // Int Toggle Logic: ON if currentVal is not '0' (disabled)
-            const isOn = currentVal !== '0';
+            const isOn = isEnabled;
 
             // Default Value Logic for toggle ON
             let defaultVal = '1';
@@ -580,7 +581,10 @@ async function init() {
                 ];
 
                 // Filter options based on experimental flag
-                const visibleOptions = optionsWithDisabled.filter(opt => showExperimental || !opt.experimental);
+                // BUT show experimental options if they are currently selected
+                const visibleOptions = optionsWithDisabled.filter(opt =>
+                    showExperimental || !opt.experimental || (opt.val === currentVal)
+                );
 
                 const optionsHtml = visibleOptions.map(opt => {
                     const isSelected = (currentVal === opt.val);
@@ -594,7 +598,10 @@ async function init() {
                         <div class="option-header">
                             <span class="option-title">${opt.label}${expBadge}</span>
                         </div>
-                        <div class="option-desc">${opt.desc || ''}</div>
+                        <div class="option-body">
+                            <div class="option-desc">${opt.desc || ''}</div>
+                            <span class="option-val">${opt.val}</span>
+                        </div>
                     </div>
                     `;
                 }).join('');
