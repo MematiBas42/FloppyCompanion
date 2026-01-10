@@ -25,7 +25,8 @@ async function init() {
     // 2. Detection & Status
     const device = await getDevice();
     const props = await getModuleProps();
-    const devInfo = await resolveDeviceInfo();
+    // Pass detected uname directly to resolveDeviceInfo
+    const devInfo = await resolveDeviceInfo(device ? device.uname : null);
 
     // Populate About Page (from module.prop)
     const aboutTitle = document.getElementById('about-title');

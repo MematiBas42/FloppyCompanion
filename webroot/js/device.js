@@ -47,7 +47,7 @@ async function getModuleProps() {
 }
 
 // --- Device Info Resolution ---
-async function resolveDeviceInfo() {
+async function resolveDeviceInfo(unameOverride) {
     let deviceName = null;
     let deviceModel = null;
     let isTrinketMi = false;
@@ -57,11 +57,11 @@ async function resolveDeviceInfo() {
     // Try to read device info
     const namePaths = [
         '/sys/kernel/sec_detect/device_name',
-        '/sys/kernel/mi_detect/device_name'
+        '/sys/mi_detect/device_name'
     ];
     const modelPaths = [
         '/sys/kernel/sec_detect/device_model',
-        '/sys/kernel/mi_detect/device_model'
+        '/sys/mi_detect/device_model'
     ];
 
     for (const path of namePaths) {
@@ -73,13 +73,28 @@ async function resolveDeviceInfo() {
         if (deviceModel) break;
     }
 
+    // Fallback if deviceName is missing but we know the kernel
+    if (!deviceName) {
+        const uname = unameOverride || await exec('uname -r');
+        if (uname) {
+            if (uname.includes('trinket')) {
+                deviceName = 'ginkgo';
+                deviceModel = 'Trinket Device';
+                isTrinketMi = true;
+            } else if (uname.includes('s5e8825')) {
+                deviceName = 'a25x';
+                is1280 = true;
+            }
+        }
+    }
+
     if (deviceName) {
         // Theme & Identification Logic
         const TRINKET_DEVICES = ['ginkgo', 'willow', 'sm6125', 'trinket', 'laurel_sprout'];
         const deviceCode = (deviceName || '').toLowerCase();
 
-        isTrinketMi = TRINKET_DEVICES.some(code => deviceCode.includes(code));
-        is1280 = window.FLOPPY1280_DEVICES.includes(deviceName);
+        isTrinketMi = isTrinketMi || TRINKET_DEVICES.some(code => deviceCode.includes(code));
+        is1280 = is1280 || window.FLOPPY1280_DEVICES.includes(deviceName);
     }
 
     return {
