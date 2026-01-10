@@ -102,6 +102,9 @@ window.showConfirmModal = function (options = {}) {
 window.logToModal = function (text) {
     const terminalOutput = document.getElementById('terminal-output');
     if (terminalOutput) {
+        if (terminalOutput.textContent && !terminalOutput.textContent.endsWith('\n')) {
+            terminalOutput.textContent += '\n';
+        }
         terminalOutput.textContent += text + '\n';
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
     }
