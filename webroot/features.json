@@ -8,32 +8,32 @@
             "options": [
                 {
                     "val": "1",
-                    "label": "Enabled",
-                    "desc": "CL0 2.2 GHz / CL1 2.496 GHz, GPU 1.209 GHz, UV disabled.",
+                    "label": "Enabled (Overclock)",
+                    "desc": "CL0 = 2.2 GHz (OC), CL1 = 2.496 GHz (OC), GPU = 1.209 GHz (OC), UV disabled.",
                     "experimental": false
                 },
                 {
                     "val": "2",
-                    "label": "MegaFloppy",
-                    "desc": "CL0 2.2 GHz / CL1 2.6 GHz, GPU 1.209 GHz, UV disabled.",
+                    "label": "MegaFloppy (Overclock, risky)",
+                    "desc": "CL0 = 2.2 GHz (OC), CL1 = 2.6 GHz (OC), GPU = 1.209 GHz (OC), UV disabled.",
                     "experimental": true
                 },
                 {
                     "val": "3",
-                    "label": "UltraFloppy",
-                    "desc": "CL0 2.2 GHz / CL1 2.704 GHz, GPU 1.209 GHz, UV disabled.",
+                    "label": "UltraFloppy (Overclock, risky)",
+                    "desc": "CL0 = 2.2 GHz (OC), CL1 = 2.704 GHz (OC), GPU = 1.209 GHz (OC), UV disabled.",
                     "experimental": true
                 },
                 {
                     "val": "4",
-                    "label": "CoolFloppy",
-                    "desc": "CL1 capped 2.112 GHz (better efficiency/thermals), GPU stock, UV enabled.",
+                    "label": "CoolFloppy (Underclock)",
+                    "desc": "CL0 = 2.0 GHz (stock), CL1 = 2.112 GHz (UC), GPU = 897 MHz (stock), UV enabled.",
                     "experimental": false
                 },
                 {
                     "val": "5",
-                    "label": "Balanced",
-                    "desc": "CL0 2.2 GHz (OC), CL1 stock 2.4 GHz, GPU stock, UV disabled.",
+                    "label": "BalancedFloppy (Overclock)",
+                    "desc": "CL0 = 2.2 GHz (OC), CL1 = 2.4 GHz (stock), GPU = 897 MHz (stock), UV disabled.",
                     "experimental": false
                 }
             ],
