@@ -487,7 +487,6 @@ body {
     width: 32px;
     height: 32px;
     fill: var(--md-sys-color-primary);
-    margin-right: 8px;
 }
 
 /* --- Experimental Toggle (M3 Switch) --- */

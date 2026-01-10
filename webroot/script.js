@@ -233,6 +233,32 @@ async function init() {
         deviceEl.textContent = 'Unknown';
     }
 
+    // --- Read module.prop ---
+    try {
+        const propContent = await exec('cat /data/adb/modules/floppy_companion/module.prop');
+        if (propContent) {
+            const props = {};
+            propContent.split('\n').forEach(line => {
+                const parts = line.split('=');
+                if (parts.length >= 2) {
+                    const key = parts[0].trim();
+                    const val = parts.slice(1).join('=').trim();
+                    props[key] = val;
+                }
+            });
+
+            const aboutTitle = document.getElementById('about-title');
+            const aboutVersion = document.getElementById('about-version');
+            const aboutDesc = document.getElementById('about-desc');
+
+            if (aboutTitle && props.name) aboutTitle.textContent = props.name;
+            if (aboutVersion && props.version) aboutVersion.textContent = props.version;
+            if (aboutDesc && props.description) aboutDesc.textContent = props.description;
+        }
+    } catch (e) {
+        console.error("Failed to read module.prop", e);
+    }
+
     // --- Platform specific features ---
 
     // AOSP Mode (Floppy1280 Only)
