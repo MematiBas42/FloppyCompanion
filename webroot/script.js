@@ -298,6 +298,7 @@ async function init() {
     let currentFeatures = {}; // Loaded from kernel
     let pendingChanges = {};  // User edits
     let showExperimental = false; // Experimental features toggle
+    let allowReadonlyPatch = false; // Allow patching read-only (info) features
     let currentSchema = null; // Current feature schema
     let currentProcCmdline = null; // Current /proc/cmdline
 
@@ -308,6 +309,7 @@ async function init() {
     const terminalOutput = document.getElementById('terminal-output');
     const modalClose = document.getElementById('modal-close');
     const experimentalToggle = document.getElementById('experimental-toggle');
+    const readonlyPatchToggle = document.getElementById('readonly-patch-toggle');
 
     // Reusable Confirmation Modal Elements
     const confirmModal = document.getElementById('confirm-modal');
@@ -389,6 +391,38 @@ async function init() {
                 }
             } else {
                 showExperimental = false;
+                if (currentSchema && currentProcCmdline !== null) {
+                    renderFeatures(currentSchema, currentProcCmdline);
+                }
+            }
+        });
+    }
+
+    // Read-only patch toggle listener
+    if (readonlyPatchToggle) {
+        readonlyPatchToggle.addEventListener('change', async (e) => {
+            if (e.target.checked) {
+                // Confirm before enabling (can cause issues)
+                const confirmed = await showConfirmModal({
+                    title: 'Allow Read-Only Patching?',
+                    body: '<p>This allows patching features marked as read-only.</p><p><strong>Use only for testing. Changes will NOT be saved.</strong></p>',
+                    icon: '<svg viewBox="0 0 24 24" width="48" height="48"><path fill="currentColor" d="M4.47 21h15.06c1.54 0 2.5-1.67 1.73-3L13.73 4.99c-.77-1.33-2.69-1.33-3.46 0L2.74 18c-.77 1.33.19 3 1.73 3zM12 14c-.55 0-1-.45-1-1v-2c0-.55.45-1 1-1s1 .45 1 1v2c0 .55-.45 1-1 1zm1 4h-2v-2h2v2z"/></svg>',
+                    iconClass: 'warning',
+                    confirmText: 'Enable',
+                    cancelText: 'Cancel'
+                });
+
+                if (confirmed) {
+                    readonlyPatchToggle.checked = true;
+                    allowReadonlyPatch = true;
+                    if (currentSchema && currentProcCmdline !== null) {
+                        renderFeatures(currentSchema, currentProcCmdline);
+                    }
+                } else {
+                    readonlyPatchToggle.checked = false;
+                }
+            } else {
+                allowReadonlyPatch = false;
                 if (currentSchema && currentProcCmdline !== null) {
                     renderFeatures(currentSchema, currentProcCmdline);
                 }
@@ -577,23 +611,26 @@ async function init() {
             // 2. Read-Only Warning (Yellow Warning Icon)
             if (item.type === 'info') {
                 const bubbleId = `bubble-readonly-${item.key}`;
+                const bubbleText = allowReadonlyPatch
+                    ? "Changing this feature's state is temporarily allowed, but will not be saved."
+                    : "This feature's state cannot be changed from the UI normally (read-only).";
                 statusIconsHtml += `
                     <div class="status-icon-wrapper" style="position:relative;">
                         <svg class="status-icon warning" onclick="toggleBubble('${bubbleId}', event)" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                         </svg>
                         <div id="${bubbleId}" class="status-bubble hidden">
-                            This feature's state cannot be changed from the UI.
+                            ${bubbleText}
                         </div>
                     </div>
                 `;
             }
 
             // --- Switch Construction ---
-            // If info type, no switch.
+            // If info type, no switch UNLESS allowReadonlyPatch is enabled
             let headerControl = '';
 
-            if (item.type !== 'info') {
+            if (item.type !== 'info' || allowReadonlyPatch) {
                 headerControl = `
                     <label class="m3-switch" style="display:inline-block; margin:0;">
                         <input type="checkbox" id="switch-${item.key}" ${isOn ? 'checked' : ''} 
