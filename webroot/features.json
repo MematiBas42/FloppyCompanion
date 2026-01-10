@@ -63,9 +63,39 @@
     ],
     "features_trinket": [
         {
-            "title": "Trinket Features",
+            "key": "no_init_protection",
+            "title": "Kill Init Protection",
+            "type": "toggle",
+            "desc": "Allow Power HALs and init scripts to modify kernel knobs. Enable if you want the ROM to control performance.",
+            "save": true
+        },
+        {
+            "key": "legacy_timestamp_source",
+            "title": "Legacy Timestamp",
+            "type": "toggle",
+            "desc": "Fixes video recording length issues on ROMs with legacy camera HALs.",
+            "save": true
+        },
+        {
+            "key": "no_msm_perf_boost",
+            "title": "Disable MSM Boost",
+            "type": "toggle",
+            "desc": "Prevent MSM Performance from overwriting CPU min/max frequencies. May reduce responsiveness.",
+            "save": true
+        },
+        {
+            "key": "warm_reboot",
+            "title": "Force Warm Reboot",
+            "type": "toggle",
+            "desc": "Preserve RAM on reboot to gather logs easier. Recommended only for debugging, can cause broken WiFi.",
+            "experimental": true,
+            "save": true
+        },
+        {
+            "key": "uname_bpf_spoof",
+            "title": "BPF Spoofing",
             "type": "info",
-            "desc": "Features for FloppyTrinketMi are not yet defined."
+            "desc": "Spoof Linux version for BPF support. Managed externally; changing this manually may cause bootloops.",
         }
     ]
 }

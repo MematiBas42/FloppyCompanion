@@ -26,6 +26,18 @@ check_magiskboot() {
     fi
 }
 
+# Helper: Resolve Boot Device (handling A/B slots)
+get_boot_device() {
+    local SLOT=$(getprop ro.boot.slot_suffix 2>/dev/null)
+    
+    # Use generic /dev/block/by-name
+    if [ -n "$SLOT" ]; then
+         echo "/dev/block/by-name/boot$SLOT"
+    else
+         echo "/dev/block/by-name/boot"
+    fi
+}
+
 case "$1" in
     unpack)
         log "Unpacking boot image..."
@@ -35,13 +47,13 @@ case "$1" in
         mkdir -p "$WORK_DIR"
         cd "$WORK_DIR"
         
-        # Determine actual boot block (handle slots if necessary, but simple for now)
-        # Assuming generic /dev/block/by-name/boot works for recent devices or provides link
+        BOOT_DEV=$(get_boot_device)
+        log "Target boot device: $BOOT_DEV"
         
-        if dd if="$BOOT_BLOCK" of=boot.img > /dev/null 2>&1; then
+        if dd if="$BOOT_DEV" of=boot.img > /dev/null 2>&1; then
             log "Boot image dumped."
         else
-            log "Error: Failed to dump boot image."
+            log "Error: Failed to dump boot image ($BOOT_DEV)."
             exit 1
         fi
 
@@ -63,14 +75,23 @@ case "$1" in
             echo "Error: Kernel not found. Refresh to unpack."
             exit 1
         fi
-        
-        # Read baked-in cmdline
-        # Expected format: cgroup.memory=nokmem aosp_mode=0 superfloppy=0 force_perm=0 ems_efficient=0
-        # Use grep to find lines with numeric values (e.g., superfloppy=0 not superfloppy=%s)
-        
+
         echo "---FEATURES_START---"
-        # Find the cmdline by looking for superfloppy= followed by a digit
-        strings kernel | grep "superfloppy=[0-9]" | head -1
+        
+        # Strategy 1: Trinket (header-based cmdline)
+        if [ -f "header" ] && grep -q "cmdline=" header; then
+            # Extract cmdline content
+            # Format in header file is: cmdline=foo=1 bar=2 ...
+            FULL_CMDLINE=$(grep "^cmdline=" header | cut -d= -f2-)
+            
+            # Output full cmdline; frontend features.js filters for relevant keys defined in features.json
+            echo "$FULL_CMDLINE"
+            
+        else
+            # Strategy 2: Floppy1280 (baked-in kernel cmdline)
+            strings kernel | grep "superfloppy=[0-9]" | head -1
+        fi
+
         echo "---FEATURES_END---"
         ;;
         
@@ -87,70 +108,93 @@ case "$1" in
         
         log "Applying patches..."
         
-        # Get current cmdline from kernel binary
-        CURRENT_CMDLINE=$(strings kernel | grep "superfloppy=[0-9]" | head -1)
-        if [ -z "$CURRENT_CMDLINE" ]; then
-            log "Error: Could not locate cmdline in binary."
+        # Detect mode
+        MODE="unknown"
+        if [ -f "header" ] && grep -q "cmdline=" header; then
+            MODE="header"
+        elif strings kernel | grep -q "superfloppy=[0-9]"; then
+            MODE="kernel"
+        fi
+        
+        if [ "$MODE" = "header" ]; then
+            # --- TRINKET / Header Mode ---
+            CMDLINE_FILE="cmdline.txt"
+            # Extract current cmdline to temp file
+            grep "^cmdline=" header | cut -d= -f2- > "$CMDLINE_FILE"
+            CURRENT_CMDLINE=$(cat "$CMDLINE_FILE")
+            
+            NEW_CMDLINE="$CURRENT_CMDLINE"
+            
+            for ARG in "$@"; do
+                KEY="${ARG%%=*}"
+                VAL="${ARG#*=}"
+                
+                if echo "$NEW_CMDLINE" | grep -q "${KEY}="; then
+                    # Replace existing
+                    NEW_CMDLINE=$(echo "$NEW_CMDLINE" | sed -E "s/${KEY}=[0-9]+/${KEY}=${VAL}/g")
+                else
+                    # Append new if not present (simple bools might be missing)
+                    NEW_CMDLINE="$NEW_CMDLINE ${KEY}=${VAL}"
+                fi
+            done
+            
+            # Clean up spaces
+            NEW_CMDLINE=$(echo "$NEW_CMDLINE" | sed -e 's;^[ \t]*;;' -e 's;  *; ;g' -e 's;[ \t]*$;;')
+            
+            log "Old: $CURRENT_CMDLINE"
+            log "New: $NEW_CMDLINE"
+            
+            # Update header file
+            # Use sed with pipe delimiter to avoid slash conflict
+            # We must be careful to only replace the cmdline line
+            sed -i "s|^cmdline=.*|cmdline=${NEW_CMDLINE}|" header
+            log "Header updated."
+            
+        elif [ "$MODE" = "kernel" ]; then
+            # --- 1280 / Kernel Mode ---
+            CURRENT_CMDLINE=$(strings kernel | grep "superfloppy=[0-9]" | head -1)
+            NEW_CMDLINE="$CURRENT_CMDLINE"
+            
+            for ARG in "$@"; do
+                KEY="${ARG%%=*}"
+                VAL="${ARG#*=}"
+                NEW_CMDLINE=$(echo "$NEW_CMDLINE" | sed -E "s/${KEY}=[0-9]+/${KEY}=${VAL}/g")
+            done
+            
+            log "Old: $CURRENT_CMDLINE"
+            log "New: $NEW_CMDLINE"
+            
+            if [ "$CURRENT_CMDLINE" != "$NEW_CMDLINE" ]; then
+                str_to_hex() { printf "%s" "$1" | xxd -p | tr -d '\n'; }
+                HEX_OLD=$(str_to_hex "$CURRENT_CMDLINE")
+                HEX_NEW=$(str_to_hex "$NEW_CMDLINE")
+                
+                if [ ${#HEX_OLD} -ne ${#HEX_NEW} ]; then
+                    log "Warning: Length mismatch. Safe padding not implemented."
+                fi
+                
+                "$MAGISKBOOT" hexpatch kernel "$HEX_OLD" "$HEX_NEW" > /dev/null 2>&1
+                log "Kernel patched."
+            else
+                log "No changes needing binary patch."
+            fi
+        else
+            log "Error: Unsupported boot image layout."
             exit 1
         fi
         
-        NEW_CMDLINE="$CURRENT_CMDLINE"
+        # Repack & Flash
+        log "Repacking..."
+        "$MAGISKBOOT" repack boot.img > /dev/null 2>&1
         
-        # Loop through arguments (key=val)
-        for ARG in "$@"; do
-            KEY="${ARG%%=*}"
-            VAL="${ARG#*=}"
-            
-            # Use sed -E for extended regex (works on Android's toybox)
-            NEW_CMDLINE=$(echo "$NEW_CMDLINE" | sed -E "s/${KEY}=[0-9]+/${KEY}=${VAL}/g")
-        done
-        
-        log "Old: $CURRENT_CMDLINE"
-        log "New: $NEW_CMDLINE"
-        
-        if [ "$CURRENT_CMDLINE" = "$NEW_CMDLINE" ]; then
-            log "No changes detected."
+        if [ -f "new-boot.img" ]; then
+            BOOT_DEV=$(get_boot_device)
+            log "Flashing to $BOOT_DEV..."
+            cat new-boot.img > "$BOOT_DEV"
+            log "Success! Reboot required."
         else
-            # Hexpatch
-            # Convert strings to hex
-            # We use xxd usually, but Android might default to toybox xxd or OD
-            # Let's use magiskboot hexpatch if we know offsets, or the hexpatch feature is generic replacement?
-            # magiskboot hexpatch <file> <hex1> <hex2> replaces ALL occurrences.
-            # We must be careful. The cmdline string should be unique enough.
-            
-            # Helper to string->hex
-            str_to_hex() {
-                printf "%s" "$1" | xxd -p | tr -d '\n'
-            }
-            
-            HEX_OLD=$(str_to_hex "$CURRENT_CMDLINE")
-            HEX_NEW=$(str_to_hex "$NEW_CMDLINE")
-            
-            # Check length - MUST be same for baked-in replacement usually?
-            # Magiskboot hexpatch usually supports different lengths if file structure allows, 
-            # but for raw binary replacement blindly, exact length is safest. 
-            # However, if we just change digits (0 -> 1), length is same.
-            
-            if [ ${#HEX_OLD} -ne ${#HEX_NEW} ]; then
-                log "Warning: Length mismatch. Padding might be needed."
-                # We assume simple integer changes for now (0->1, 1->2)
-            fi
-            
-            "$MAGISKBOOT" hexpatch kernel "$HEX_OLD" "$HEX_NEW" > /dev/null 2>&1
-            log "Kernel patched."
-            
-            # Repack
-            log "Repacking..."
-            "$MAGISKBOOT" repack boot.img > /dev/null 2>&1
-            
-            if [ -f "new-boot.img" ]; then
-                log "Flashing..."
-                cat new-boot.img > "$BOOT_BLOCK"
-                log "Success! Reboot required."
-            else
-                log "Error: Repack failed."
-                exit 1
-            fi
+            log "Error: Repack failed."
+            exit 1
         fi
         ;;
         
