@@ -576,31 +576,31 @@ async function init() {
             if (item.type === 'select') {
                 // Add "Disabled" option
                 const optionsWithDisabled = [
-                    { val: '0', label: 'Disabled', desc: '', experimental: false },
+                    { val: '0', label: 'Disabled', desc: 'Disable this feature.', experimental: false },
                     ...item.options
                 ];
 
                 // Filter options based on experimental flag
                 const visibleOptions = optionsWithDisabled.filter(opt => showExperimental || !opt.experimental);
-                const chipsHtml = visibleOptions.map(opt => {
+
+                const optionsHtml = visibleOptions.map(opt => {
+                    const isSelected = (currentVal === opt.val);
+                    const selectedClass = isSelected ? 'selected' : '';
                     const expBadge = opt.experimental ? '<span class="experimental-badge">Exp</span>' : '';
+
                     return `
-                    <button class="chip-btn ${opt.val === currentVal ? 'selected' : ''}" 
-                        data-val="${opt.val}"
-                        onclick="updateFeature('${item.key}', '${opt.val}', this)"
-                        title="${opt.desc || ''}">
-                        ${opt.label}${expBadge}
-                    </button>
+                    <div class="option-item ${selectedClass}" 
+                         data-val="${opt.val}"
+                         onclick="updateFeature('${item.key}', '${opt.val}', this)">
+                        <div class="option-header">
+                            <span class="option-title">${opt.label}${expBadge}</span>
+                        </div>
+                        <div class="option-desc">${opt.desc || ''}</div>
+                    </div>
                     `;
                 }).join('');
 
-                let optionDesc = '';
-                const currentOpt = optionsWithDisabled.find(o => o.val === currentVal);
-                if (currentOpt && currentOpt.desc) {
-                    optionDesc = `<div class="text-sm text-dim" style="margin-top:8px;">${currentOpt.desc}</div>`;
-                }
-
-                bodyControls = `<div class="feature-controls" id="ctrl-${item.key}" style="margin-top:12px;">${chipsHtml}</div>${optionDesc}`;
+                bodyControls = `<div class="option-list" id="ctrl-${item.key}">${optionsHtml}</div>`;
             }
 
             // Current Value Display
