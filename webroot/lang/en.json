@@ -32,7 +32,11 @@
         "optionDisabled": "Disabled",
         "pendingChanges": "Pending",
         "noDescription": "No description available",
-        "disabledDesc": "Disable this feature."
+        "disabledDesc": "Disable this feature.",
+        "tooltipReboot": "The running kernel's value and boot partition's value are mismatched! A reboot might be pending to apply changes.",
+        "tooltipReadOnlyAllowed": "Changing this feature's state is temporarily allowed, but will not be saved.",
+        "tooltipReadOnlyBlocked": "This feature's state cannot be changed from the UI normally (read-only).",
+        "tooltipExperimental": "Experimental"
     },
     "tweaks": {
         "title": "Tweaks",
