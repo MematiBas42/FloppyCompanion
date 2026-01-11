@@ -89,7 +89,8 @@ case "$1" in
             
         else
             # Strategy 2: Floppy1280 (baked-in kernel cmdline)
-            strings kernel | grep "superfloppy=[0-9]" | head -1
+            # Use cgroup.memory=nokmem as anchor
+            strings kernel | grep "cgroup.memory=nokmem" | head -1
         fi
 
         echo "---FEATURES_END---"
@@ -112,7 +113,7 @@ case "$1" in
         MODE="unknown"
         if [ -f "header" ] && grep -q "cmdline=" header; then
             MODE="header"
-        elif strings kernel | grep -q "superfloppy=[0-9]"; then
+        elif strings kernel | grep -q "cgroup.memory=nokmem"; then
             MODE="kernel"
         fi
         
@@ -154,7 +155,8 @@ case "$1" in
             
         elif [ "$MODE" = "kernel" ]; then
             # --- 1280 / Kernel Mode ---
-            CURRENT_CMDLINE=$(strings kernel | grep "superfloppy=[0-9]" | head -1)
+            # Use cgroup.memory=nokmem as anchor to find actual cmdline
+            CURRENT_CMDLINE=$(strings kernel | grep "cgroup.memory=nokmem" | head -1)
             NEW_CMDLINE="$CURRENT_CMDLINE"
             
             for ARG in "$@"; do
