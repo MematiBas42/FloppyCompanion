@@ -430,3 +430,4 @@ window.registerTweak = registerTweak;
 window.initPresets = initPresets;
 window.collectAllTweakStates = collectAllTweakStates;
 window.loadPresetToUI = loadPresetToUI;
+window.getDefaultPreset = () => defaultPresetData;

@@ -52,11 +52,14 @@ async function loadZramState() {
             if (zramSavedState[key] === '') delete zramSavedState[key];
         });
 
-        // Initialize pending state from saved if available, else from current
+        // Initialize pending state from saved if available, else from current, else from defaults
+        const defaults = window.getDefaultPreset ? window.getDefaultPreset() : null;
+        const defZram = defaults?.tweaks?.zram || {};
+
         zramPendingState = {
-            disksize: zramSavedState.disksize || zramCurrentState.disksize || '0',
-            algorithm: zramSavedState.algorithm || zramCurrentState.algorithm || 'lz4',
-            enabled: zramSavedState.enabled !== undefined ? zramSavedState.enabled : (zramCurrentState.enabled || '1')
+            disksize: zramSavedState.disksize || zramCurrentState.disksize || defZram.disksize || '0',
+            algorithm: zramSavedState.algorithm || zramCurrentState.algorithm || defZram.algorithm || 'lz4',
+            enabled: zramSavedState.enabled !== undefined ? zramSavedState.enabled : (zramCurrentState.enabled || defZram.enabled || '1')
         };
 
         renderZramCard();
@@ -375,7 +378,9 @@ async function loadMemoryState() {
         });
 
         // Initialize pending
-        memoryPendingState = { ...memoryCurrentState, ...memorySavedState };
+        const defaults = window.getDefaultPreset ? window.getDefaultPreset() : null;
+        const defMem = defaults?.tweaks?.memory || {};
+        memoryPendingState = { ...defMem, ...memoryCurrentState, ...memorySavedState };
 
         // Determine initial Dirty Mode
         // If bytes are non-zero, use bytes. Otherwise default to ratio.
@@ -632,15 +637,15 @@ function initMemoryTweak() {
 
 // Initialize tweaks tab
 async function initTweaksTab() {
+    // Initialize preset system first (to load defaults)
+    if (typeof window.initPresets === 'function') {
+        await window.initPresets();
+    }
+
     // Initialize individual tweaks
     initZramTweak();
     initMemoryTweak();
     initIoSchedulerTweak();
-
-    // Initialize preset system (after tweaks are registered)
-    if (typeof window.initPresets === 'function') {
-        await window.initPresets();
-    }
 }
 
 // I/O Scheduler State
@@ -691,8 +696,10 @@ async function loadIoSchedulerState() {
         // Initialize pending state
         ioschedPendingState = {};
         ioschedDevices.forEach(d => {
-            // Priority: Saved > Active in system
-            ioschedPendingState[d.device] = ioschedSavedState[d.device] || d.active;
+            // Priority: Saved > Active in system > Default
+            const defaults = window.getDefaultPreset ? window.getDefaultPreset() : null;
+            const defIo = defaults?.tweaks?.iosched || {};
+            ioschedPendingState[d.device] = ioschedSavedState[d.device] || d.active || defIo[d.device];
         });
 
         renderIoCard();
