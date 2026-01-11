@@ -136,7 +136,7 @@ async function init() {
     const versionEl = document.getElementById('kernel-version');
     const variantEl = document.getElementById('kernel-variant');
     const buildTypeEl = document.getElementById('build-type');
-    const subtitleEl = document.getElementById('managed-kernel-subtitle');
+
 
     const fabRefresh = document.getElementById('fab-refresh');
     const fabApply = document.getElementById('fab-apply');
@@ -176,15 +176,17 @@ async function init() {
 
     if (deviceEl) deviceEl.textContent = devInfo.displayName;
 
-    // Theme & Subtitle
+    // Theme & Device Name Chip
+    const deviceNameEl = document.getElementById('managed-device-name');
+
     if (devInfo.isTrinketMi) {
         document.body.classList.add('theme-orange');
-        if (subtitleEl) subtitleEl.textContent = "Managing: FloppyTrinketMi";
+        if (deviceNameEl) deviceNameEl.textContent = "FloppyTrinketMi";
     } else if (devInfo.is1280) {
         document.body.classList.add('theme-exynos-blue');
-        if (subtitleEl) subtitleEl.textContent = 'Managing: Floppy1280';
+        if (deviceNameEl) deviceNameEl.textContent = 'Floppy1280';
     } else {
-        if (subtitleEl) subtitleEl.textContent = 'Managing: FloppyKernel';
+        if (deviceNameEl) deviceNameEl.textContent = 'FloppyKernel';
     }
 
     // Platform-specific reboot options
