@@ -58,6 +58,8 @@
             "diskSize": "Tamaño de disco",
             "algorithm": "Algoritmo",
             "custom": "Personalizado",
+            "customSize": "Tamaño Personalizado (MiB)",
+            "enterSize": "Ingrese tamaño",
             "disableWarningTitle": "¿Desactivar ZRAM?",
             "disableWarningBody": "Esto tendrá un <strong>impacto negativo importante en el rendimiento</strong> y tu dispositivo podría experimentar congelamientos.",
             "disableWarningNote": "¡Solo desactiva la ZRAM si sabes lo que estás haciendo!"

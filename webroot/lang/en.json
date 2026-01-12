@@ -58,6 +58,8 @@
             "diskSize": "Disk Size",
             "algorithm": "Algorithm",
             "custom": "Custom",
+            "customSize": "Custom Size (MiB)",
+            "enterSize": "Enter size",
             "disableWarningTitle": "Disable ZRAM?",
             "disableWarningBody": "This will have a <strong>major negative impact on performance</strong> and your device may experience freezes.",
             "disableWarningNote": "Only disable ZRAM if you know what you are doing!"

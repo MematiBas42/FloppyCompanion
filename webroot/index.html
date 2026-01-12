@@ -828,10 +828,16 @@
                                     <button class="option-btn" id="zram-size-custom-btn" data-size="custom"
                                         data-i18n="tweaks.zram.custom">Custom</button>
                                 </div>
-                                <div id="zram-custom-input-row" class="custom-input-row hidden">
-                                    <input type="number" id="zram-custom-size" min="1" max="65536"
-                                        placeholder="Enter size">
-                                    <span class="input-suffix">MiB</span>
+                                <div id="zram-custom-input-row" class="tweak-row hidden"
+                                    style="border-bottom: none; margin-top: 12px;">
+                                    <div class="tweak-info-col">
+                                        <span class="tweak-label" data-i18n="tweaks.zram.customSize">Custom Size
+                                            (MiB)</span>
+                                    </div>
+                                    <div class="tweak-input-container">
+                                        <input type="number" id="zram-custom-size" class="styled-input" min="1"
+                                            max="65536">
+                                    </div>
                                 </div>
 
                                 <!-- Algorithm Section -->
