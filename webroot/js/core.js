@@ -8,6 +8,8 @@ window.VARIANTS = {
     'SKS': 'SukiSU Ultra'
 };
 
+window.DATA_DIR = '/data/adb/modules/floppy_companion';
+
 window.FLOPPY1280_DEVICES = ['a25x', 'a33x', 'a53x', 'm33x', 'm34x', 'gta4xls', 'a26xs'];
 
 // --- KSU Execution Wrapper ---

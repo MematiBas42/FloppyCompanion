@@ -15,6 +15,7 @@
     --md-sys-color-surface-variant: #e1e3de;
     --md-sys-color-on-surface-variant: #444745;
     --md-sys-color-outline: #747775;
+    --md-sys-color-outline-variant: #c4c7c5;
     --md-sys-shape-corner-large: 16px;
     --md-sys-shape-corner-medium: 12px;
     --md-sys-color-surface-container: #f0f4ff;
@@ -41,6 +42,7 @@
         --md-sys-color-surface-variant: #444745;
         --md-sys-color-on-surface-variant: #c4c7c5;
         --md-sys-color-outline: #8e918f;
+        --md-sys-color-outline-variant: #444745;
         --md-sys-color-surface-container: #1b2029;
         /* Dark bluish grey */
         --md-sys-color-surface-container-high: #2b2b2f;
@@ -769,8 +771,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 4px 0;
-    border-bottom: 1px solid var(--md-sys-color-outline-variant);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .toggle-label {
@@ -855,23 +856,157 @@ body {
     margin-right: 2px;
 }
 
-.custom-input-row {
+/* Slider Styles */
+.slider-container {
+    padding: 0 0 12px 0;
+    /* No top (handled by separator margin), Bottom 12px */
+}
+
+.value-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 12px;
+}
+
+.styled-slider {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    /* Match thumb height for proper hit area */
+    width: 100%;
+    background: transparent;
+    /* Track is drawn via runnable-track */
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+
+.styled-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: var(--md-sys-color-surface-variant);
+    border-radius: 2px;
+}
+
+.tweak-row {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.tweak-separator {
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    padding-bottom: 10px;
+    /* Space between content and separator line */
+    margin-bottom: 2px;
+}
+
+.styled-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--md-sys-color-primary);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s;
+    margin-top: -8px;
+    /* Center thumb: (4px track - 20px thumb) / 2 */
+}
+
+.styled-slider::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+}
+
+/* Visual Ticks Logic */
+/* Ticks are generated via JS (SVG Data URI) and set to --track-ticks variable */
+.styled-slider::-webkit-slider-runnable-track {
+    background:
+        var(--track-ticks, none),
+        /* SVG Ticks */
+        linear-gradient(var(--md-sys-color-surface-variant), var(--md-sys-color-surface-variant));
+    /* Solid track */
+
+    background-size:
+        calc(100% - 20px) 100%,
+        /* Ticks constrain to thumb travel */
+        100% 100%;
+    /* Track matches full input width */
+
+    background-position: center, center;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+}
+
+/* Info/Warning Notice */
+.info-notice {
+    background-color: #2b2120;
+    /* Darker red-ish bg for warning */
+    border: 1px solid #693c38;
+    color: #ffb4ab;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.info-notice.hidden {
+    display: none;
+    margin: 0;
+}
+
+.info-notice.warning {
+    background-color: #2b2920;
+    border: 1px solid #69593c;
+    color: #ffd699;
+}
+
+.info-notice .notice-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.info-notice .notice-content {
+    flex-grow: 1;
+}
+
+.info-notice .notice-dismiss {
+    color: inherit;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: underline;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+/* Custom Input Row (existing) */
+.custom-input-row {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 12px;
+    flex-shrink: 0;
 }
 
 .custom-input-row input {
-    flex: 1;
-    max-width: 150px;
-    padding: 12px 14px;
+    flex: 0 0 auto;
+    width: 65px;
+    padding: 8px 22px 8px 8px;
+    /* Extra right padding for suffix overlay */
     border: 1px solid var(--md-sys-color-outline);
     border-radius: var(--md-sys-shape-corner-medium);
     background-color: var(--md-sys-color-surface-container-high);
     color: var(--md-sys-color-on-surface);
     font-size: 14px;
     outline: none;
+    text-align: center;
 }
 
 .custom-input-row input:focus {
@@ -884,9 +1019,25 @@ body {
     opacity: 0.6;
 }
 
-.input-suffix {
+.custom-input-row .input-suffix {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 14px;
     color: var(--md-sys-color-on-surface-variant);
+    pointer-events: none;
+}
+
+/* Slider drag-only (no tap-to-jump) */
+.styled-slider {
+    pointer-events: none;
+    /* Disable track clicks */
+}
+
+.styled-slider::-webkit-slider-thumb {
+    pointer-events: auto;
+    /* Enable thumb dragging */
 }
 
 .current-values {
@@ -1053,7 +1204,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     color: var(--md-sys-color-primary);
 }
 

@@ -90,12 +90,26 @@
             "desc2": "Custom throttle frequency. Set your own throttle limit in KHz.",
             "desc3": "Less aggressive throttling. Frequencies: 2400 → 2288 → 2208 MHz. Runs hotter."
         },
+        "undervolt": {
+            "title": "Undervolt",
+            "little": "Little Cluster",
+            "big": "Big Cluster",
+            "gpu": "GPU",
+            "unlockRange": "Unlock full range",
+            "notice": "Undervolt settings were cleared because you enabled or changed the Unlocked Mode. This prevents crashes from incompatible undervolt configurations.",
+            "highValueWarning": "Values above 10% are almost guaranteed to cause an immediate crash. You may enter a bootloop until the module is disabled.",
+            "unlockConfirmTitle": "Unlock full range?",
+            "unlockConfirmBody": "<p>Values beyond 15% have <strong>no practical use</strong> and will cause immediate instability.</p><p>Are you sure you want to unlock the full range?</p>"
+        },
         "platformTweaks": "Platform Tweaks",
+        "dismiss": "Dismiss",
         "tooltip": {
             "zram": "Compressed RAM block device. Helps multitasking by compressing data in RAM. Usually, higher size translates to more apps fitting in ZRAM.",
             "memory": "Settings to control the Linux Virtual Memory (VM) subsystem. Adjusts how the kernel balances performance, battery life, and multitasking.",
+            "gpu": "Sets the maximum GPU frequency. Higher values improve performance but use more battery.",
             "ioScheduler": "Algorithm used to order and merge I/O requests. Affects storage performance and latency.",
-            "thermal": "Controls Big cluster CPU throttling. Mode 3 is aggressive performance, Mode 1 is stock-like, Mode 0 disables throttling (dangerous!)."
+            "thermal": "Controls Big cluster CPU throttling. Mode 3 is aggressive performance, Mode 1 is stock-like, Mode 0 disables throttling (dangerous!).",
+            "undervolt": "Reduces voltage to save power and reduce heat. Not recommended with Overclocking (Unlocked Mode)."
         }
     },
     "about": {
@@ -124,6 +138,7 @@
         "disable": "Disable",
         "apply": "Apply",
         "reboot": "Reboot",
+        "unlock": "Unlock",
         "experimentalTitle": "Experimental Features",
         "experimentalBody": "<p>Features exposed by enabling this toggle might be unfinished, unsupported, or dangerous.</p><p><strong>Proceed with caution.</strong></p>",
         "readonlyTitle": "Allow Read-Only Patching?",

@@ -429,6 +429,19 @@ async function applyChanges() {
                 }
             }
 
+            // Check for incompatible Undervolt settings
+            if (pendingChanges['superfloppy']) {
+                const val = pendingChanges['superfloppy'];
+                // Modes 1, 2, 3, 5 are overclock/unlocked modes incompatible with custom UV
+                if (['1', '2', '3', '5'].includes(val)) {
+                    logToModal("\nClearing incompatible undervolt settings...");
+                    if (window.clearUndervoltPersistence) {
+                        await window.clearUndervoltPersistence();
+                        logToModal("Undervolt settings cleared.");
+                    }
+                }
+            }
+
             logToModal("\nAll done! Please reboot.");
             const modalClose = document.getElementById('modal-close');
             if (modalClose) modalClose.classList.remove('hidden');

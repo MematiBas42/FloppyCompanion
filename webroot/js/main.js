@@ -222,11 +222,19 @@ async function init() {
     if (devInfo.isTrinketMi) {
         document.body.classList.add('theme-orange');
         if (deviceNameEl) deviceNameEl.textContent = "FloppyTrinketMi";
+        window.KERNEL_NAME = 'FloppyTrinketMi';
     } else if (devInfo.is1280) {
         document.body.classList.add('theme-exynos-blue');
         if (deviceNameEl) deviceNameEl.textContent = 'Floppy1280';
+        window.KERNEL_NAME = 'Floppy1280';
     } else {
         if (deviceNameEl) deviceNameEl.textContent = 'FloppyKernel';
+        window.KERNEL_NAME = 'FloppyKernel';
+    }
+
+    // Initialize Platform Tweaks now that KERNEL_NAME is set
+    if (window.initPlatformTweaks) {
+        window.initPlatformTweaks();
     }
 
     // Platform-specific reboot options

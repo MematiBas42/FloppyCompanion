@@ -387,6 +387,146 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Undervolt Card (Floppy1280 only) -->
+                        <div id="undervolt-card" class="card tweak-card hidden">
+                            <div class="card-header">
+                                <!-- bolt icon -->
+                                <svg class="icon-svg" viewBox="0 -960 960 960">
+                                    <path
+                                        d="m422-232 207-248H469l29-227-185 267h139l-30 208ZM320-80l40-280H160l360-520h80l-40 320h240L400-80h-80Zm151-390Z" />
+                                </svg>
+                                <span class="card-title" data-i18n="tweaks.undervolt.title">Undervolt</span>
+                                <div class="status-icon-wrapper"
+                                    style="position:relative; display:inline-block; vertical-align:middle; margin-left:8px;">
+                                    <svg class="status-icon info"
+                                        onclick="toggleBubble('bubble-tweak-undervolt', event)" viewBox="0 0 24 24"
+                                        style="width:18px;height:18px;cursor:pointer;color:var(--md-sys-color-primary);">
+                                        <path fill="currentColor"
+                                            d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    </svg>
+                                    <div id="bubble-tweak-undervolt" class="status-bubble center hidden"
+                                        data-i18n="tweaks.tooltip.undervolt"></div>
+                                </div>
+                                <span id="undervolt-pending-indicator" class="pending-indicator hidden"
+                                    data-i18n="tweaks.unsaved">Unsaved</span>
+                            </div>
+                            <div class="card-content">
+                                <!-- Incompatibility Notice (shown only after undervolt cleared by mode change) -->
+                                <div id="undervolt-notice" class="info-notice hidden">
+                                    <svg class="notice-icon" viewBox="0 0 24 24">
+                                        <path
+                                            d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                                    </svg>
+                                    <div class="notice-content">
+                                        <span data-i18n="tweaks.undervolt.notice"></span>
+                                        <br>
+                                        <span class="notice-dismiss"
+                                            onclick="document.getElementById('undervolt-notice').classList.add('hidden')"
+                                            data-i18n="tweaks.dismiss">Dismiss</span>
+                                    </div>
+                                </div>
+
+                                <!-- High Value Warning (shown when any value > 10%) -->
+                                <div id="undervolt-high-warning" class="info-notice warning hidden">
+                                    <svg class="notice-icon" viewBox="0 0 24 24">
+                                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                                    </svg>
+                                    <div class="notice-content">
+                                        <span data-i18n="tweaks.undervolt.highValueWarning">Values above 10% are almost
+                                            guaranteed to cause an immediate crash. You may enter a bootloop until the
+                                            module is disabled.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Unlock Range Switch -->
+                                <div class="tweak-row" style="border-bottom: none; padding-bottom: 0;">
+                                    <div class="tweak-info-col">
+                                        <span class="tweak-label" data-i18n="tweaks.undervolt.unlockRange">Unlock Full
+                                            Range</span>
+                                    </div>
+                                    <div class="tweak-switch-container">
+                                        <label class="m3-switch" style="display:inline-block; margin:0;">
+                                            <input type="checkbox" id="undervolt-unlock-switch">
+                                            <span class="m3-switch-track">
+                                                <span class="m3-switch-thumb"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Little Cluster -->
+                                <div class="slider-container tweak-separator"
+                                    style="border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 2px; margin-top: 20px;">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label" data-i18n="tweaks.undervolt.little">Little
+                                                Cluster</span>
+                                            <span class="tweak-val" id="undervolt-val-little">0%</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="undervolt-slider-little"
+                                            class="styled-slider tweak-slider-locked" min="0" max="15" value="0">
+
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="undervolt-input-little" value="0" min="0"
+                                                max="100">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Big Cluster -->
+                                <div class="slider-container tweak-separator">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label" data-i18n="tweaks.undervolt.big">Big
+                                                Cluster</span>
+                                            <span class="tweak-val" id="undervolt-val-big">0%</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="undervolt-slider-big"
+                                            class="styled-slider tweak-slider-locked" min="0" max="15" value="0">
+
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="undervolt-input-big" value="0" min="0" max="100">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- GPU -->
+                                <div class="slider-container">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label" data-i18n="tweaks.undervolt.gpu">GPU</span>
+                                            <span class="tweak-val" id="undervolt-val-gpu">0%</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="undervolt-slider-gpu"
+                                            class="styled-slider tweak-slider-locked" min="0" max="15" value="0">
+
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="undervolt-input-gpu" value="0" min="0" max="100">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="tweak-actions" style="margin-top: 28px;">
+                                    <button class="tweak-action-btn secondary" id="undervolt-btn-save"
+                                        data-i18n="tweaks.save">Save</button>
+                                    <button class="tweak-action-btn secondary" id="undervolt-btn-apply"
+                                        data-i18n="tweaks.apply">Apply</button>
+                                    <button class="tweak-action-btn primary" id="undervolt-btn-save-apply"
+                                        data-i18n="tweaks.saveApply">Save & Apply</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Common Tweaks Section -->

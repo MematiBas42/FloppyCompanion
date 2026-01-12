@@ -91,12 +91,26 @@
             "desc2": "Frecuencia de throttle personalizada. Establece tu propio límite en KHz.",
             "desc3": "Throttling menos agresivo. Frecuencias: 2400 → 2288 → 2208 MHz. Calienta más."
         },
+        "undervolt": {
+            "title": "Undervolt",
+            "little": "Little Cluster",
+            "big": "Big Cluster",
+            "gpu": "GPU",
+            "unlockRange": "Desbloquear rango completo",
+            "notice": "Los ajustes de undervolt fueron borrados porque habilitaste o cambiaste el Modo Unlocked. Esto previene crasheos por configuraciones de undervolt incompatibles.",
+            "highValueWarning": "Valores por encima del 10% casi seguramente causarán un crasheo inmediato. Podrías entrar en un bootloop hasta desactivar el módulo.",
+            "unlockConfirmTitle": "¿Desbloquear rango completo?",
+            "unlockConfirmBody": "<p>Valores por encima del 15% <strong>no tienen uso práctico</strong> y causarán inestabilidad inmediata.</p><p>¿Estás seguro de que quieres desbloquear el rango completo?</p>"
+        },
         "platformTweaks": "Ajustes de Plataforma",
+        "dismiss": "Descartar",
         "tooltip": {
             "zram": "Dispositivo de bloque de RAM comprimida. Ayuda a la multitarea comprimiendo datos en la RAM. Generalmente, un mayor tamaño significa que caben más apps en ZRAM.",
             "memory": "Ajustes para controlar el subsistema de Memoria Virtual (VM) de Linux. Ajusta cómo el kernel equilibra rendimiento, batería y multitarea.",
+            "gpu": "Establece la frecuencia máxima de la GPU. Valores más altos mejoran el rendimiento pero consumen más batería.",
             "ioScheduler": "Algoritmo usado para ordenar y fusionar peticiones de E/S. Afecta el rendimiento y latencia del almacenamiento.",
-            "thermal": "Controla el throttling del clúster Big. Modo 3 es rendimiento agresivo, Modo 1 es similar a stock, Modo 0 desactiva el throttling (¡peligroso!)."
+            "thermal": "Controla el throttling de la CPU del clúster Big. Modo 3 es rendimiento agresivo, Modo 1 es tipo stock, Modo 0 desactiva el throttling (¡peligroso!).",
+            "undervolt": "Reduce el voltaje para ahorrar energía y calor. No recomendado con Overclocking (Modo Unlocked)."
         }
     },
     "about": {
@@ -125,6 +139,7 @@
         "disable": "Desactivar",
         "apply": "Aplicar",
         "reboot": "Reiniciar",
+        "unlock": "Desbloquear",
         "experimentalTitle": "Características experimentales",
         "experimentalBody": "<p>Las características expuestas al activar esta opción pueden estar incompletas, sin soporte o ser peligrosas.</p><p><strong>Procede con precaución.</strong></p>",
         "readonlyTitle": "¿Permitir modificar solo lectura?",
