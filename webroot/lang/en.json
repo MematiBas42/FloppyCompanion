@@ -76,10 +76,26 @@
         "iosched": {
             "ioScheduler": "I/O Scheduler"
         },
+        "thermal": {
+            "title": "Thermal Modes",
+            "activeMode": "Active mode",
+            "mode0": "Disabled",
+            "mode1": "Stock",
+            "mode2": "Custom",
+            "mode3": "Performance",
+            "customFreq": "Throttle Freq (KHz)",
+            "desc0": "Disables throttling completely. The Big cluster will run at max frequency until 120°C shutdown.",
+            "desc0Warn": "DANGEROUS!",
+            "desc1": "Stock throttling. Frequencies: 2288 → 2132 → 2002 MHz. This is the default mode.",
+            "desc2": "Custom throttle frequency. Set your own throttle limit in KHz.",
+            "desc3": "Less aggressive throttling. Frequencies: 2400 → 2288 → 2208 MHz. Runs hotter."
+        },
+        "platformTweaks": "Platform Tweaks",
         "tooltip": {
             "zram": "Compressed RAM block device. Helps multitasking by compressing data in RAM. Usually, higher size translates to more apps fitting in ZRAM.",
             "memory": "Settings to control the Linux Virtual Memory (VM) subsystem. Adjusts how the kernel balances performance, battery life, and multitasking.",
-            "ioScheduler": "Algorithm used to order and merge I/O requests. Affects storage performance and latency."
+            "ioScheduler": "Algorithm used to order and merge I/O requests. Affects storage performance and latency.",
+            "thermal": "Controls Big cluster CPU throttling. Mode 3 is aggressive performance, Mode 1 is stock-like, Mode 0 disables throttling (dangerous!)."
         }
     },
     "about": {

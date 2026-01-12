@@ -312,6 +312,83 @@
                         </div>
                     </div>
 
+                    <!-- Platform Tweaks Section (conditionally shown) -->
+                    <div id="platform-tweaks-section" class="hidden">
+                        <h2 class="section-title" data-i18n="tweaks.platformTweaks">Platform Tweaks</h2>
+
+                        <!-- Thermal Modes Card (Floppy1280 only) -->
+                        <div id="thermal-card" class="card tweak-card hidden">
+                            <div class="card-header">
+                                <!-- thermostat icon (Google Material) -->
+                                <svg class="icon-svg" viewBox="0 -960 960 960">
+                                    <path
+                                        d="M480-80q-83 0-141.5-58.5T280-280q0-48 21-89.5t59-70.5v-320q0-50 35-85t85-35q50 0 85 35t35 85v320q38 29 59 70.5t21 89.5q0 83-58.5 141.5T480-80Zm-40-440h80v-40h-40v-40h40v-80h-40v-40h40v-40q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v240Z" />
+                                </svg>
+                                <span class="card-title" data-i18n="tweaks.thermal.title">Thermal Modes</span>
+                                <div class="status-icon-wrapper"
+                                    style="position:relative; display:inline-block; vertical-align:middle; margin-left:8px;">
+                                    <svg class="status-icon info" onclick="toggleBubble('bubble-tweak-thermal', event)"
+                                        viewBox="0 0 24 24"
+                                        style="width:18px;height:18px;cursor:pointer;color:var(--md-sys-color-primary);">
+                                        <path fill="currentColor"
+                                            d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    </svg>
+                                    <div id="bubble-tweak-thermal" class="status-bubble center hidden"
+                                        data-i18n="tweaks.tooltip.thermal"></div>
+                                </div>
+                                <span id="thermal-pending-indicator" class="pending-indicator hidden"
+                                    data-i18n="tweaks.unsaved">Unsaved</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="tweak-row" style="border-bottom: none;">
+                                    <div class="tweak-info-col">
+                                        <span class="tweak-label" data-i18n="tweaks.thermal.activeMode">Active
+                                            mode</span>
+                                        <span class="tweak-val" id="thermal-val-mode">--</span>
+                                    </div>
+                                </div>
+                                <!-- Mode Options -->
+                                <div id="thermal-mode-options" class="option-buttons">
+                                    <button class="option-btn" data-mode="0">Disabled <span
+                                            class="mode-num">0</span></button>
+                                    <button class="option-btn" data-mode="1">Stock <span
+                                            class="mode-num">1</span></button>
+                                    <button class="option-btn" data-mode="3">Performance <span
+                                            class="mode-num">3</span></button>
+                                    <button class="option-btn" data-mode="2">Custom <span
+                                            class="mode-num">2</span></button>
+                                </div>
+
+                                <!-- Mode Description -->
+                                <div id="thermal-mode-description" class="tweak-description"></div>
+
+                                <!-- Custom Frequency (for Mode 2) -->
+                                <div id="thermal-custom-freq-row" class="tweak-row hidden"
+                                    style="border-bottom: none; margin-top: 12px;">
+                                    <div class="tweak-info-col">
+                                        <span class="tweak-label" data-i18n="tweaks.thermal.customFreq">Throttle Freq
+                                            (KHz)</span>
+                                        <span class="tweak-val" id="thermal-val-custom_freq">--</span>
+                                    </div>
+                                    <div class="tweak-input-container">
+                                        <input type="number" id="thermal-custom_freq" class="styled-input"
+                                            placeholder="2288000">
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="tweak-actions">
+                                    <button class="tweak-action-btn secondary" id="thermal-btn-save"
+                                        data-i18n="tweaks.save">Save</button>
+                                    <button class="tweak-action-btn secondary" id="thermal-btn-apply"
+                                        data-i18n="tweaks.apply">Apply</button>
+                                    <button class="tweak-action-btn primary" id="thermal-btn-save-apply"
+                                        data-i18n="tweaks.saveApply">Save & Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Common Tweaks Section -->
                     <h2 class="section-title" data-i18n="tweaks.commonTweaks">Common Tweaks</h2>
 
@@ -481,7 +558,8 @@
                                     <div class="tweak-row">
                                         <div class="tweak-info-col">
                                             <span class="tweak-label"
-                                                data-i18n="tweaks.memory.dirtyBackgroundRatio">Dirty Background
+                                                data-i18n="tweaks.memory.dirtyBackgroundRatio">Dirty
+                                                Background
                                                 Ratio</span>
                                             <span class="tweak-val" id="mem-val-dirty_background_ratio">--</span>
                                         </div>

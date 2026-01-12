@@ -39,6 +39,11 @@ if [ -f "$MODDIR/tweaks/iosched.sh" ]; then
     sh "$MODDIR/tweaks/iosched.sh" apply_saved
 fi
 
+# Thermal Mode (Floppy1280 only)
+if [ -f "$MODDIR/tweaks/thermal.sh" ]; then
+    sh "$MODDIR/tweaks/thermal.sh" apply_saved
+fi
+
 # --- Update Module Description ---
 KERN_VER=$(uname -r)
 DESCRIPTION="Companion module to tweak FloppyKernel."

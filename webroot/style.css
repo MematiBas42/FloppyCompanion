@@ -801,6 +801,13 @@ body {
     gap: 8px;
 }
 
+.option-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
 .option-btn {
     padding: 8px 16px;
     border: 1px solid var(--md-sys-color-outline);
@@ -822,6 +829,30 @@ body {
     background-color: var(--md-sys-color-secondary-container);
     color: var(--md-sys-color-on-secondary-container);
     border-color: transparent;
+}
+
+.mode-num {
+    opacity: 0.5;
+    font-size: 0.9em;
+    margin-left: 2px;
+}
+
+.tweak-description {
+    font-size: 13px;
+    color: var(--md-sys-color-on-surface-variant);
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.warning-text {
+    color: #f44336;
+}
+
+.warning-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+    margin-right: 2px;
 }
 
 .custom-input-row {

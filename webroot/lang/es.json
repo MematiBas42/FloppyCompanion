@@ -77,10 +77,26 @@
             "title": "Scheduler de E/S",
             "ioScheduler": "Planificador E/S"
         },
+        "thermal": {
+            "title": "Modos Térmicos",
+            "activeMode": "Modo activo",
+            "mode0": "Desactivado",
+            "mode1": "Stock",
+            "mode2": "Personalizado",
+            "mode3": "Rendimiento",
+            "customFreq": "Frec. límite (KHz)",
+            "desc0": "Desactiva el throttling. El clúster Big correrá a máxima frecuencia hasta apagarse a 120°C.",
+            "desc0Warn": "¡PELIGROSO!",
+            "desc1": "Throttling stock. Frecuencias: 2288 → 2132 → 2002 MHz. Es el modo por defecto.",
+            "desc2": "Frecuencia de throttle personalizada. Establece tu propio límite en KHz.",
+            "desc3": "Throttling menos agresivo. Frecuencias: 2400 → 2288 → 2208 MHz. Calienta más."
+        },
+        "platformTweaks": "Ajustes de Plataforma",
         "tooltip": {
             "zram": "Dispositivo de bloque de RAM comprimida. Ayuda a la multitarea comprimiendo datos en la RAM. Generalmente, un mayor tamaño significa que caben más apps en ZRAM.",
             "memory": "Ajustes para controlar el subsistema de Memoria Virtual (VM) de Linux. Ajusta cómo el kernel equilibra rendimiento, batería y multitarea.",
-            "ioScheduler": "Algoritmo usado para ordenar y fusionar peticiones de E/S. Afecta el rendimiento y latencia del almacenamiento."
+            "ioScheduler": "Algoritmo usado para ordenar y fusionar peticiones de E/S. Afecta el rendimiento y latencia del almacenamiento.",
+            "thermal": "Controla el throttling del clúster Big. Modo 3 es rendimiento agresivo, Modo 1 es similar a stock, Modo 0 desactiva el throttling (¡peligroso!)."
         }
     },
     "about": {
