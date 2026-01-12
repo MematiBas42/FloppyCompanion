@@ -94,6 +94,11 @@ fi
       "block_ed3": "$(cat /sys/devices/virtual/sec/tsp/block_ed3 2>/dev/null || echo 0)",
       "gpu_clklck": "$(cat /sys/kernel/gpu/gpu_clklck 2>/dev/null || echo 0)",
       "gpu_unlock": "$(cat /sys/kernel/gpu/gpu_unlock 2>/dev/null || echo 0)"
+    },
+    "soundcontrol": {
+      "hp_l": "$(cat /sys/kernel/sound_control/headphone_gain 2>/dev/null | awk '{print $1}' || echo 0)",
+      "hp_r": "$(cat /sys/kernel/sound_control/headphone_gain 2>/dev/null | awk '{print $2}' || echo 0)",
+      "mic": "$(cat /sys/kernel/sound_control/mic_gain 2>/dev/null || echo 0)"
     }
   }
 }

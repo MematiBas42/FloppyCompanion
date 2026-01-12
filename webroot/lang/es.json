@@ -115,6 +115,14 @@
             "enabled": "Habilitado",
             "disabled": "Deshabilitado"
         },
+        "soundcontrol": {
+            "title": "Control de Sonido",
+            "splitChannels": "Separar Canales L/R",
+            "headphone": "Ganancia Auriculares",
+            "headphoneL": "Auricular L",
+            "headphoneR": "Auricular R",
+            "mic": "Ganancia Micrófono"
+        },
         "platformTweaks": "Ajustes de Plataforma",
         "dismiss": "Descartar",
         "tooltip": {
@@ -126,7 +134,8 @@
             "undervolt": "Reduce el voltaje para ahorrar energía y calor. No recomendado con Overclocking (Modo Unlocked).",
             "blockEd3": "Desactiva Ear Detect Modo 3, que evita que la pantalla baje su tasa de refresco cuando el sensor de proximidad virtual está activo. También hace el sensor de proximidad menos sensible.",
             "gpuClkLock": "Cuando está habilitado, evita que se cambien las frecuencias min/max de la GPU. Útil para bloquear los relojes de la GPU en un rango específico.",
-            "gpuUnlock": "Habilita el overclocking de la GPU inmediatamente. Solo funciona en modos de Superfloppy con overclock (1, 2, 3). Deshabilitado si el Modo Unlocked está desactivado o en modos no-OC."
+            "gpuUnlock": "Habilita el overclocking de la GPU inmediatamente. Solo funciona en modos de Superfloppy con overclock (1, 2, 3). Deshabilitado si el Modo Unlocked está desactivado o en modos no-OC.",
+            "soundcontrol": "Ajusta la ganancia de auriculares y micrófono en decibelios. Valores más altos aumentan el volumen. Usa Separar L/R para controlar los canales izquierdo y derecho de forma independiente."
         }
     },
     "about": {

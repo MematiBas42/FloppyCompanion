@@ -114,6 +114,14 @@
             "enabled": "Enabled",
             "disabled": "Disabled"
         },
+        "soundcontrol": {
+            "title": "Sound Control",
+            "splitChannels": "Split L/R Channels",
+            "headphone": "Headphone Gain",
+            "headphoneL": "Headphone L",
+            "headphoneR": "Headphone R",
+            "mic": "Microphone Gain"
+        },
         "platformTweaks": "Platform Tweaks",
         "dismiss": "Dismiss",
         "tooltip": {
@@ -125,7 +133,8 @@
             "undervolt": "Reduces voltage to save power and reduce heat. Not recommended with Overclocking (Unlocked Mode).",
             "blockEd3": "Disables Ear Detect Mode 3, which prevents the display from lowering its refresh rate when the virtual proximity sensor is engaged. Also makes the proximity sensor less sensitive.",
             "gpuClkLock": "When enabled, prevents the GPU min/max frequencies from being changed. Useful for locking GPU clocks to a specific range.",
-            "gpuUnlock": "Enables GPU overclocking immediately. Only works in Superfloppy overclock modes (1, 2, 3). Greyed out if Unlocked Mode is disabled or in non-OC modes."
+            "gpuUnlock": "Enables GPU overclocking immediately. Only works in Superfloppy overclock modes (1, 2, 3). Greyed out if Unlocked Mode is disabled or in non-OC modes.",
+            "soundcontrol": "Adjust headphone and microphone gain in decibels. Higher values increase volume. Use Split L/R to control left and right channels independently."
         }
     },
     "about": {

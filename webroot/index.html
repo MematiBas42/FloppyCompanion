@@ -644,6 +644,138 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Sound Control Card (FloppyTrinketMi only) -->
+                        <div id="soundcontrol-card" class="card tweak-card hidden">
+                            <div class="card-header">
+                                <!-- headphones icon -->
+                                <svg class="icon-svg" viewBox="0 -960 960 960">
+                                    <path
+                                        d="M360-120H200q-33 0-56.5-23.5T120-200v-280q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480v280q0 33-23.5 56.5T760-120H600v-320h160v-40q0-117-81.5-198.5T480-760q-117 0-198.5 81.5T200-480v40h160v320Zm-80-240h-80v160h80v-160Zm400 0v160h80v-160h-80Zm-400 0h-80 80Zm400 0h80-80Z" />
+                                </svg>
+                                <span class="card-title" data-i18n="tweaks.soundcontrol.title">Sound Control</span>
+                                <div class="status-icon-wrapper"
+                                    style="position:relative; display:inline-block; vertical-align:middle; margin-left:8px;">
+                                    <svg class="status-icon info"
+                                        onclick="toggleBubble('bubble-tweak-soundcontrol', event)" viewBox="0 0 24 24"
+                                        style="width:18px;height:18px;cursor:pointer;color:var(--md-sys-color-primary);">
+                                        <path fill="currentColor"
+                                            d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    </svg>
+                                    <div id="bubble-tweak-soundcontrol" class="status-bubble center hidden"
+                                        data-i18n="tweaks.tooltip.soundcontrol"></div>
+                                </div>
+                                <span id="soundcontrol-pending-indicator" class="pending-indicator hidden"
+                                    data-i18n="tweaks.unsaved">Unsaved</span>
+                            </div>
+                            <div class="card-content">
+                                <!-- Split L/R Switch -->
+                                <div class="tweak-row" style="border-bottom: none; padding-bottom: 0;">
+                                    <div class="tweak-info-col">
+                                        <span class="tweak-label" data-i18n="tweaks.soundcontrol.splitChannels">Split
+                                            L/R Channels</span>
+                                    </div>
+                                    <div class="tweak-switch-container">
+                                        <label class="m3-switch" style="display:inline-block; margin:0;">
+                                            <input type="checkbox" id="soundcontrol-split-switch">
+                                            <span class="m3-switch-track">
+                                                <span class="m3-switch-thumb"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Headphone Combined (shown when not split) -->
+                                <div id="soundcontrol-hp-combined" class="slider-container tweak-separator"
+                                    style="border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 2px; margin-top: 20px;">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label"
+                                                data-i18n="tweaks.soundcontrol.headphone">Headphone Gain</span>
+                                            <span class="tweak-val" id="soundcontrol-val-hp">0 dB</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="soundcontrol-slider-hp" class="styled-slider" min="0"
+                                            max="20" value="0">
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="soundcontrol-input-hp" value="0" min="0" max="20">
+                                            <span class="input-suffix">dB</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Headphone L (shown when split) -->
+                                <div id="soundcontrol-hp-left" class="slider-container tweak-separator hidden"
+                                    style="border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 2px; margin-top: 20px;">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label"
+                                                data-i18n="tweaks.soundcontrol.headphoneL">Headphone L</span>
+                                            <span class="tweak-val" id="soundcontrol-val-hp-l">0 dB</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="soundcontrol-slider-hp-l" class="styled-slider" min="0"
+                                            max="20" value="0">
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="soundcontrol-input-hp-l" value="0" min="0"
+                                                max="20">
+                                            <span class="input-suffix">dB</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Headphone R (shown when split) -->
+                                <div id="soundcontrol-hp-right" class="slider-container tweak-separator hidden">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label"
+                                                data-i18n="tweaks.soundcontrol.headphoneR">Headphone R</span>
+                                            <span class="tweak-val" id="soundcontrol-val-hp-r">0 dB</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="soundcontrol-slider-hp-r" class="styled-slider" min="0"
+                                            max="20" value="0">
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="soundcontrol-input-hp-r" value="0" min="0"
+                                                max="20">
+                                            <span class="input-suffix">dB</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Microphone -->
+                                <div class="slider-container">
+                                    <div class="tweak-row" style="border-bottom: none; padding-bottom: 4px;">
+                                        <div class="tweak-info-col">
+                                            <span class="tweak-label" data-i18n="tweaks.soundcontrol.mic">Microphone
+                                                Gain</span>
+                                            <span class="tweak-val" id="soundcontrol-val-mic">0 dB</span>
+                                        </div>
+                                    </div>
+                                    <div class="value-row">
+                                        <input type="range" id="soundcontrol-slider-mic" class="styled-slider" min="0"
+                                            max="20" value="0">
+                                        <div class="custom-input-row" style="margin-top: 0;">
+                                            <input type="number" id="soundcontrol-input-mic" value="0" min="0" max="20">
+                                            <span class="input-suffix">dB</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="tweak-actions" style="margin-top: 28px;">
+                                    <button class="tweak-action-btn secondary" id="soundcontrol-btn-save"
+                                        data-i18n="tweaks.save">Save</button>
+                                    <button class="tweak-action-btn secondary" id="soundcontrol-btn-apply"
+                                        data-i18n="tweaks.apply">Apply</button>
+                                    <button class="tweak-action-btn primary" id="soundcontrol-btn-save-apply"
+                                        data-i18n="tweaks.saveApply">Save & Apply</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Common Tweaks Section -->
