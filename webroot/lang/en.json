@@ -149,7 +149,12 @@
         "kernelLinksTemplate": "{name} links",
         "translationCredits": "Translation credits",
         "repository": "repository",
-        "telegram": "Telegram channel"
+        "telegram": "Telegram channel",
+        "easterEgg": {
+            "title": "Thank you for using FloppyKernel!",
+            "signature": "- Flopster101",
+            "closeAria": "Close"
+        }
     },
     "toast": {
         "settingsSaved": "Settings saved",

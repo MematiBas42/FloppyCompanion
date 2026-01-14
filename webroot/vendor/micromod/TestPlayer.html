@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Micromod for JavaScript</title>
+	</head>
+	<body>
+		<script type="text/javascript" src="AudioPlayer.js"></script>
+		<script type="text/javascript" src="Micromod.js"></script>
+		<script type="text/javascript">
+			var player = new AudioPlayer();
+			var micromod = null;
+			var currentModule = null;
+			function updateStatus() {
+				var backend = player.getBackend ? player.getBackend() : "unknown";
+				var buf = player.getBufferedSeconds ? player.getBufferedSeconds() : 0;
+				var und = player.getUnderrunFrames ? player.getUnderrunFrames() : 0;
+				document.getElementById( "status" ).innerHTML = "Backend: " + backend + " | Buffer: " + buf.toFixed( 2 ) + "s | Underrun frames: " + und;
+			}
+			function applySettings() {
+				if( micromod ) {
+					micromod.setInterpolation( document.getElementById( "interp" ).checked );
+				}
+				if( currentModule ) {
+					currentModule.stereoSeparation = parseFloat( document.getElementById( "sep" ).value );
+					document.getElementById( "sepValue" ).innerHTML = currentModule.stereoSeparation.toFixed( 2 );
+				}
+				updateStatus();
+			}
+			function play() {
+				player.play();
+			}
+			function stop() {
+				player.stop();
+			}
+			function setModule( moduleData ) {
+				stop();
+				currentModule = new Module( moduleData );
+				micromod = new Micromod( currentModule, player.getSamplingRate() );
+				applySettings();
+				player.setAudioSource( micromod );
+				document.getElementById( "songName" ).innerHTML = "Song Name: " + currentModule.songName;
+			}
+			function loadFile( file ) {
+				var reader = new FileReader();
+				reader.onloadend = function( event ) {
+					setModule( new Int8Array( reader.result ) );
+				};
+				reader.readAsArrayBuffer( file );
+			}
+			function loadURL( url ) {
+				var request = new XMLHttpRequest();
+				request.open( "GET", url, true );
+				request.responseType = "arraybuffer";
+				request.onload = function( event ) {
+					setModule( new Int8Array( request.response ) );
+				};
+				request.send( null );
+			}
+			setInterval( updateStatus, 250 );
+		</script>
+		<p>
+			<h3>Micromod for JavaScript!</h3>
+		</p>
+		<p>
+			Please direct any comments, questions, complaints :) to mumart@gmail.com
+		</p>
+		<p>
+			<div id="songName">No song loaded.</div>
+		</p>
+		<p>
+			<div id="status">Backend: (stopped)</div>
+		</p>
+		<p>
+			<input type="file" id="input" onchange="loadFile( this.files[ 0 ] )"></input>
+			<button onclick="play()">Play</button>
+			<button onclick="stop()">Stop</button>
+		</p>
+		<p>
+			<label><input type="checkbox" id="interp" onchange="applySettings()"> Linear interpolation</label>
+		</p>
+		<p>
+			<label>Stereo separation: <span id="sepValue">0.50</span></label>
+			<input type="range" id="sep" min="0" max="1" step="0.01" value="0.5" onchange="applySettings()" oninput="applySettings()"></input>
+		</p>
+	</body>
+</html>

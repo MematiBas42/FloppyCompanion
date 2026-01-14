@@ -1304,6 +1304,69 @@ body {
     justify-content: center;
 }
 
+/* Easter egg loading/tap hint: path-following outline glow that ramps with each tap */
+#tab-about .logo-container {
+    position: relative;
+}
+
+#tab-about .logo-container .ee-logo-glow-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    filter: blur(7px);
+    transition:
+        opacity 220ms cubic-bezier(0.2, 0.9, 0.2, 1),
+        filter 240ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+#tab-about .logo-container .ee-logo-glow-svg path {
+    fill: transparent;
+    stroke: rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.85);
+    stroke-width: 18px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#tab-about .logo-container .app-logo-svg:not(.ee-logo-glow-svg) {
+    position: relative;
+    z-index: 1;
+    transition: filter 220ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+#tab-about .logo-container.ee-glow-1 .ee-logo-glow-svg {
+    opacity: 0.30;
+    filter: blur(7px);
+}
+
+#tab-about .logo-container.ee-glow-2 .ee-logo-glow-svg {
+    opacity: 0.52;
+    filter: blur(8px);
+}
+
+#tab-about .logo-container.ee-glow-3 .ee-logo-glow-svg {
+    opacity: 0.76;
+    filter: blur(9px);
+}
+
+#tab-about .logo-container.ee-glow-1 .app-logo-svg:not(.ee-logo-glow-svg) {
+    filter: drop-shadow(0 0 10px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.18));
+}
+
+#tab-about .logo-container.ee-glow-2 .app-logo-svg:not(.ee-logo-glow-svg) {
+    filter:
+    drop-shadow(0 0 14px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.22))
+    drop-shadow(0 0 20px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.10));
+}
+
+#tab-about .logo-container.ee-glow-3 .app-logo-svg:not(.ee-logo-glow-svg) {
+    filter:
+    drop-shadow(0 0 18px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.28))
+    drop-shadow(0 0 26px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.14));
+}
+
 .app-logo-svg {
     width: 100%;
     height: 100%;
@@ -1548,6 +1611,171 @@ body {
 
 .modal.hidden {
     display: none;
+}
+
+/* Easter Egg Modal */
+#easter-egg-modal {
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.78);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 520ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+#easter-egg-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#easter-egg-modal.is-closing {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#easter-egg-modal .easter-egg-content {
+    transform: translateY(14px) scale(0.92);
+    opacity: 0;
+    transition:
+        transform 520ms cubic-bezier(0.2, 0.9, 0.2, 1),
+        opacity 520ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+#easter-egg-modal.is-open .easter-egg-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+#easter-egg-modal.is-closing .easter-egg-content {
+    transform: translateY(14px) scale(0.92);
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #easter-egg-modal,
+    #easter-egg-modal .easter-egg-content {
+        transition: none;
+        transform: none;
+    }
+}
+
+.easter-egg-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.easter-egg-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    width: min(520px, 92vw);
+    height: min(460px, 70vh);
+    min-height: 340px;
+    padding: 22px 18px;
+    text-align: center;
+    border-radius: 28px;
+    overflow: hidden;
+    background: rgba(10, 10, 14, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.easter-egg-content > :not(.easter-egg-canvas):not(.easter-egg-close-x) {
+    position: relative;
+    z-index: 1;
+}
+
+.easter-egg-logo .app-logo-svg {
+    width: 140px;
+    height: 140px;
+    filter:
+    drop-shadow(0 0 14px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.28))
+    drop-shadow(0 0 24px rgba(var(--md-sys-color-primary-rgb, 140, 190, 255), 0.14));
+}
+
+.easter-egg-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+    letter-spacing: 0.2px;
+}
+
+.easter-egg-sig {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.easter-egg-top {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 6px;
+}
+
+.easter-egg-text {
+    padding-bottom: 8px;
+}
+
+.easter-egg-close-x {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    left: auto;
+    bottom: auto;
+    z-index: 2;
+    width: 22px;
+    height: 22px;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.72);
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.easter-egg-close-x::before,
+.easter-egg-close-x::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transform-origin: 50% 50%;
+}
+
+.easter-egg-close-x::before {
+    transform: rotate(45deg);
+}
+
+.easter-egg-close-x::after {
+    transform: rotate(-45deg);
+}
+
+.easter-egg-close-x:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.22);
+    outline-offset: 4px;
+}
+
+.easter-egg-close-x:hover {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .modal-content {

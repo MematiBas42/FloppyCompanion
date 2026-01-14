@@ -150,7 +150,12 @@
         "projectCredits": "Créditos del proyecto",
         "translationCredits": "Créditos de traducción",
         "repository": "repositorio",
-        "telegram": "Canal de Telegram"
+        "telegram": "Canal de Telegram",
+        "easterEgg": {
+            "title": "¡Gracias por usar FloppyKernel!",
+            "signature": "- Flopster101",
+            "closeAria": "Cerrar"
+        }
     },
     "toast": {
         "settingsSaved": "Configuración guardada",
