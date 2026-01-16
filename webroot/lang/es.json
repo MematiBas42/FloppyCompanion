@@ -227,10 +227,5 @@
         "applyChangesBody": "<p>Esto flasheará el kernel con la característica modificada a tu dispositivo.</p><p><strong>Esto implica riesgos.</strong></p>",
         "rebootPendingBody": "<p>¿Estás seguro de que quieres {action}?</p><p><strong>¡Tienes cambios sin aplicar que se perderán!</strong></p>",
         "processingKernel": "Procesando Kernel..."
-    },
-    "language": {
-        "title": "Idioma",
-        "en": "English",
-        "es": "Español"
     }
 }

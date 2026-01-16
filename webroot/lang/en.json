@@ -226,10 +226,5 @@
         "applyChangesBody": "<p>This will flash the feature-patched kernel to your device.</p><p><strong>This involves risks.</strong></p>",
         "rebootPendingBody": "<p>Are you sure you want to {action}?</p><p><strong>You have unapplied changes that will be lost!</strong></p>",
         "processingKernel": "Processing Kernel..."
-    },
-    "language": {
-        "title": "Language",
-        "en": "English",
-        "es": "Español"
     }
 }
