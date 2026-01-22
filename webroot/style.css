@@ -305,6 +305,12 @@ body.theme-detect-anim .nav-item .icon {
     justify-content: center;
     line-height: 0;
     vertical-align: middle;
+    margin-left: 6px;
+}
+
+.tooltip-anchor {
+    margin-left: 2px;
+    vertical-align: middle;
 }
 
 .status-icon {
@@ -1263,7 +1269,8 @@ body {
 .pending-tooltip {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
+    right: auto;
     margin-top: 8px;
     padding: 8px 12px;
     background-color: var(--md-sys-color-inverse-surface);
@@ -1271,7 +1278,8 @@ body {
     font-size: 12px;
     font-weight: 500;
     border-radius: 8px;
-    white-space: nowrap;
+    max-width: 200px;
+    word-wrap: break-word;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-4px);
@@ -1447,6 +1455,7 @@ body {
     align-items: center;
     gap: 12px;
     margin-bottom: 12px;
+    padding-right: 44px;
     color: var(--md-sys-color-primary);
 }
 
@@ -1456,16 +1465,14 @@ body {
 }
 
 .card-title-wrap {
-    display: inline-flex;
-    align-items: center;
+    display: inline;
     gap: 8px;
     min-width: 0;
-    flex: 1 1 auto;
-    flex-wrap: wrap;
 }
 
 .card-title-wrap .card-title {
     white-space: normal;
+    vertical-align: middle;
 }
 
 .info-row {
@@ -1513,6 +1520,7 @@ body {
     padding-bottom: 12px;
     border-bottom: 1px solid var(--md-sys-color-outline-variant);
     margin-bottom: 12px;
+    padding-right: 44px;
 }
 
 .link-list {
@@ -2183,7 +2191,7 @@ body {
     color: var(--md-sys-color-on-surface);
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .tweak-val {
