@@ -12,7 +12,6 @@
         "unknown": "Unknown",
         "kernelStatus": "Kernel Status",
         "device": "Device",
-        "linux": "Linux",
         "variant": "Variant",
         "version": "Version",
         "buildType": "Build Type",
@@ -217,7 +216,6 @@
         "build": {
             "release": "Release Build",
             "testing": "Testing",
-            "git": "Git",
             "dirty": "Dirty"
         },
         "easterEgg": {

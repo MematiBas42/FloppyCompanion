@@ -32,7 +32,7 @@ function updateTranslatableHomeStrings() {
             if (hashMatch) {
                 label += ` (${hashMatch[1]})`;
             } else {
-                label += ` (${t('about.build.git') || 'Git'})`;
+                label += ` (${'Git'})`;
             }
             if (uname.includes('dirty')) {
                 label += ` (${t('about.build.dirty') || 'Dirty'})`;
@@ -499,7 +499,7 @@ async function init() {
                 if (hashMatch) {
                     label += ` (${hashMatch[1]})`;
                 } else {
-                    label += ` (${t('about.build.git') || 'Git'})`;
+                    label += ` (${'Git'})`;
                 }
                 if (uname.includes('dirty')) {
                     label += ` (${t('about.build.dirty') || 'Dirty'})`;
