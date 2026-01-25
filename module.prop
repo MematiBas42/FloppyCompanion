@@ -4,3 +4,4 @@ version=v1.0.1
 versionCode=101
 author=Flopster101
 description=Companion module to tweak FloppyKernel.
+updateJson=https://raw.githubusercontent.com/FlopKernel-Series/FloppyCompanion/master/update.json
