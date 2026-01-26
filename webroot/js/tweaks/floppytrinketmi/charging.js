@@ -100,6 +100,20 @@ async function initChargingTweak() {
         return;
     }
 
+    // Register tweak immediately (Early Registration)
+    if (typeof window.registerTweak === 'function') {
+        window.registerTweak('charging', {
+            getState: () => ({ ...chargingPendingState }),
+            setState: (config) => {
+                chargingPendingState = { ...chargingPendingState, ...config };
+                renderChargingCard();
+            },
+            render: renderChargingCard,
+            save: saveCharging,
+            apply: applyCharging
+        });
+    }
+
     const availOutput = await runChargingBackend('is_available');
     const available = parseKeyValue(availOutput).available === '1';
     if (!available) {
@@ -137,17 +151,4 @@ async function initChargingTweak() {
     });
 
     loadChargingState();
-
-    if (typeof window.registerTweak === 'function') {
-        window.registerTweak('charging', {
-            getState: () => ({ ...chargingPendingState }),
-            setState: (config) => {
-                chargingPendingState = { ...chargingPendingState, ...config };
-                renderChargingCard();
-            },
-            render: renderChargingCard,
-            save: saveCharging,
-            apply: applyCharging
-        });
-    }
 }

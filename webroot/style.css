@@ -866,6 +866,10 @@ body {
     transform: scale(0.95);
 }
 
+.preset-btn.danger {
+    color: #ba1a1a;
+}
+
 .preset-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;

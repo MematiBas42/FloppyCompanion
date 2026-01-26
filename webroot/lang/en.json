@@ -58,6 +58,9 @@
         "loadPresetWarning": "This will override and <strong>save</strong> your current settings.",
         "loadOnly": "Load Only",
         "applyNow": "Apply Now",
+        "deletePreset": "Delete Preset",
+        "deletePresetTitle": "Delete Preset",
+        "deletePresetConfirm": "Are you sure you want to delete preset \"{name}\"?",
         "commonTweaks": "Common Tweaks",
         "save": "Save",
         "apply": "Apply",
@@ -236,6 +239,7 @@
     "modal": {
         "confirm": "Confirm",
         "cancel": "Cancel",
+        "delete": "Delete",
         "close": "Close",
         "enable": "Enable",
         "disable": "Disable",

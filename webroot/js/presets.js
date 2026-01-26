@@ -329,6 +329,47 @@ PRESET_EOF`);
     showToast(`Imported "${name}"`);
 }
 
+// Handle Delete button click
+async function handleDeletePreset() {
+    if (currentPresetBuiltIn) {
+        showToast('Cannot delete built-in presets', true);
+        return;
+    }
+
+    const title = window.t ? window.t('tweaks.deletePresetTitle') : 'Delete Preset';
+    const message = window.t 
+        ? window.t('tweaks.deletePresetConfirm').replace('{name}', currentPresetName) 
+        : `Are you sure you want to delete preset "${currentPresetName}"?`;
+    
+    const confirmBtnText = window.t ? window.t('modal.delete') : 'Delete';
+    const cancelBtnText = window.t ? window.t('modal.cancel') : 'Cancel';
+
+    const confirmed = await showConfirmModal({
+        title: title,
+        body: `<p>${message}</p>`,
+        iconClass: 'warning', // Shows red warning icon
+        confirmText: confirmBtnText,
+        cancelText: cancelBtnText
+    });
+
+    if (!confirmed) return;
+
+    const presetDir = '/data/adb/floppy_companion/presets';
+    const filePath = `${presetDir}/${currentPresetName}.json`;
+
+    // Execute delete
+    await exec(`rm "${filePath}"`);
+    
+    showToast(`Deleted "${currentPresetName}"`);
+
+    // Reset to Default
+    currentPresetName = 'Default';
+    currentPresetBuiltIn = true;
+    
+    // Reload list
+    await loadAvailablePresets();
+}
+
 // Prompt for preset name
 async function promptPresetName() {
     const result = await showConfirmModal({
@@ -392,6 +433,13 @@ function renderPresetSelector() {
         exportBtn.disabled = currentPresetBuiltIn;
         exportBtn.style.opacity = currentPresetBuiltIn ? '0.5' : '1';
     }
+
+    // Update delete button state
+    const deleteBtn = document.getElementById('preset-delete-btn');
+    if (deleteBtn) {
+        deleteBtn.disabled = currentPresetBuiltIn;
+        deleteBtn.style.opacity = currentPresetBuiltIn ? '0.5' : '1';
+    }
 }
 
 // =============================================================================
@@ -411,6 +459,7 @@ async function initPresets() {
     const saveBtn = document.getElementById('preset-save-btn');
     const importBtn = document.getElementById('preset-import-btn');
     const exportBtn = document.getElementById('preset-export-btn');
+    const deleteBtn = document.getElementById('preset-delete-btn');
 
     if (selector) {
         selector.addEventListener('change', (e) => {
@@ -427,6 +476,7 @@ async function initPresets() {
     if (saveBtn) saveBtn.addEventListener('click', handleSavePreset);
     if (importBtn) importBtn.addEventListener('click', handleImportPreset);
     if (exportBtn) exportBtn.addEventListener('click', handleExportPreset);
+    if (deleteBtn) deleteBtn.addEventListener('click', handleDeletePreset);
 
     // Re-render preset selector when language changes
     document.addEventListener('languageChanged', renderPresetSelector);

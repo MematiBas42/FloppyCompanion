@@ -165,6 +165,26 @@ function updateSoundControlSliderTicks(slider) {
 }
 
 function initSoundControlTweak() {
+    // Register tweak immediately (Early Registration)
+    if (typeof window.registerTweak === 'function') {
+        window.registerTweak('soundcontrol', {
+            getState: () => ({ ...scPendingState }),
+            setState: (config) => {
+                scPendingState = { ...scPendingState, ...config };
+                // Handle split mode logic during restore
+                if (scPendingState.hp_l !== scPendingState.hp_r) {
+                    toggleSoundControlSplitMode(true);
+                    const splitSwitch = document.getElementById('soundcontrol-split-switch');
+                    if (splitSwitch) splitSwitch.checked = true;
+                }
+                renderSoundControlCard();
+            },
+            render: renderSoundControlCard,
+            save: saveSoundControl,
+            apply: applySoundControl
+        });
+    }
+
     const card = document.getElementById('soundcontrol-card');
     if (!card) return;
 
@@ -270,23 +290,4 @@ function initSoundControlTweak() {
     document.addEventListener('languageChanged', () => {
         renderSoundControlCard();
     });
-
-    if (typeof window.registerTweak === 'function') {
-        window.registerTweak('soundcontrol', {
-            getState: () => ({ ...scPendingState }),
-            setState: (config) => {
-                scPendingState = { ...scPendingState, ...config };
-                // Handle split mode logic during restore
-                if (scPendingState.hp_l !== scPendingState.hp_r) {
-                    toggleSoundControlSplitMode(true);
-                    const splitSwitch = document.getElementById('soundcontrol-split-switch');
-                    if (splitSwitch) splitSwitch.checked = true;
-                }
-                renderSoundControlCard();
-            },
-            render: renderSoundControlCard,
-            save: saveSoundControl,
-            apply: applySoundControl
-        });
-    }
 }
