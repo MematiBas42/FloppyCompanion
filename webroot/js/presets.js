@@ -220,7 +220,7 @@ async function savePresetAs(name) {
         tweaks: collectAllTweakStates()
     };
 
-    const presetDir = '/data/adb/modules/floppy_companion/presets';
+    const presetDir = '/data/adb/floppy_companion/presets';
     const filePath = `${presetDir}/${name}.json`;
 
     // Write file
@@ -309,14 +309,14 @@ async function handleImportPreset() {
 
     // Sanitize name
     const name = (presetData.name || file.name.replace('.json', '')).replace(/[^a-zA-Z0-9_-]/g, '_');
-    const modulePresetDir = '/data/adb/modules/floppy_companion/presets';
-    const moduleFilePath = `${modulePresetDir}/${name}.json`;
+    const presetDir = '/data/adb/floppy_companion/presets';
+    const filePath = `${presetDir}/${name}.json`;
 
     presetData.name = name;
     presetData.builtIn = false;
 
     const json = JSON.stringify(presetData, null, 2);
-    await exec(`mkdir -p "${modulePresetDir}" && cat > "${moduleFilePath}" << 'PRESET_EOF'
+    await exec(`mkdir -p "${presetDir}" && cat > "${filePath}" << 'PRESET_EOF'
 ${json}
 PRESET_EOF`);
 
